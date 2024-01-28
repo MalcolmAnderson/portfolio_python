@@ -54,8 +54,7 @@ def reset_function():
     lb_check_marks.config(text = "")
         
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
-def translate_reps_to_break_or_work(reps):
-    pass
+
 
 def start_function():
     # TODO 
