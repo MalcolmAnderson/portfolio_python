@@ -1,2 +1,2 @@
 def translate_reps_to_break_or_work(reps):
-    pass
+    return "Work"
