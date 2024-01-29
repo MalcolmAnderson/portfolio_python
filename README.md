@@ -6,10 +6,13 @@ However you got here, I welcome you to my portfolio.
 
 The application I have to showcase for you is a Pomodoro application.
 
-This application demonstrates unit testing, code organization, and UI development.
+This application demonstrates, logging, unit testing, code organization, and UI development.
 
 To run the project use the following command from the terminal
 python3 pomodoro.py
+
+to see the logs run the following command in a terminal
+tail -f portfolio_python.log
 
 If you are using vscode, you can open the folder as a dev container at which point, all the appropriate tools will  be built for you and the application will just run.
 
