@@ -1,4 +1,5 @@
 import tkinter as tk
+import pom_tools as pom
 
 
 import mba_logging as log
@@ -29,13 +30,11 @@ else:
     MIN_LONG_BREAK = .3 # 20 for prod, .3 for testing (18 seconds)
     MIN_WORK = .2 # 25 for prod, .2 for testing (12 seconds)
 
-CHECK_MARK = "✔"
 button_font = (FONT_NAME, 24, "bold")
 title_font = (FONT_NAME, 64, "bold")
 check_mark_font = (FONT_NAME, 64, "bold")
 label_x_pad = 20
 label_y_pad = 20
-TWO_DIGIT_FORMAT_CODE = '%02d'
 reps = 0
 timer = None
 
@@ -57,50 +56,38 @@ def reset_function():
 
 
 def start_function():
-    # TODO 
-    logger.info("start button clicked")
+    # TODO return value from translater maybe should be an enum
+    logger.info(f"start button clicked")
     global reps
     reps += 1
-    if reps % 2 == 1: 
+    pom_type = pom.translate_reps_to_break_or_work(reps)
+    if pom_type == "Work": 
         lb_title.config(text="WORK ", fg=GREEN)
         count = MIN_WORK * 60
     else:
-        if reps % 8 == 0:
+        if pom_type == "Long Break":
             count = MIN_LONG_BREAK * 60
             lb_title.config(text="BREAK", fg=RED)
         else:
             count = MIN_BREAK * 60
             lb_title.config(text="BREAK", fg=PINK)
-        
+    logger.info(f"pom number: {reps}, pom type: {pom_type}, pom seconds: {count}")
     count_down(count)
     
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
-def convert_seconds_to_time_string(seconds):
-    minutes_string = str(seconds // 60)
-    seconds_string = TWO_DIGIT_FORMAT_CODE % (seconds % 60)
-    return minutes_string + ":" + seconds_string
-
-def get_check_marks(reps):
-    poms = (reps + 1) // 2
-    pom_str = ""
-    for i in range(poms):
-        pom_str += CHECK_MARK
-    return pom_str
-
-
 def count_down(count):
     count = int(count)
-    time_text = convert_seconds_to_time_string(count)
+    time_text = pom.convert_seconds_to_time_string(count)
     canvas.itemconfig(timer_text, text=time_text)
     logger.debug(time_text, reps)
     if count > 0:
         global timer
         timer = window.after(1000, count_down, count - 1)
     else:
-        lb_title.config(text = "Timer")
+        lb_title.config(text = "Timer", fg=GREEN)
         if reps % 2 == 1: 
-            pom_text = get_check_marks(reps)
+            pom_text = pom.get_check_marks(reps)
             lb_check_marks.config(text = pom_text)
         
 
